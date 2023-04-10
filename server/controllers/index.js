@@ -5,8 +5,10 @@ const configuration = require('../config');
 const openAi = new OpenAIApi(configuration);
 
 const transcribeHandler = async (req, res) => {
+  const audioFile = fs.createReadStream(req.file.path);
+
   await openAi.createTranscription(
-    fs.createReadStream(req.file.path),
+    audioFile,
     'whisper-1'
   ).then(resOpenAI => {
     res.status(resOpenAI.status).json({ message: resOpenAI.data.text });
